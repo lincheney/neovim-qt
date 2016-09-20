@@ -11,8 +11,14 @@ configuration:
 - RelWithDebInfo
 matrix:
   fast_finish: true
+install:
+- ps: (new-object net.webclient).DownloadFile('https://ci.appveyor.com/api/projects/neovim/neovim/artifacts/build/Neovim.exe?tag=nightly&job=Configuration%3A%20MINGW_64', 'Neovim.exe')
+- start "" /wait Neovim.exe /S
+- dir C:\Program Files (x86)\Neovim\bin
+- nvim --version
 build_script:
 - cmd: '%SCRIPT%'
+- cmd: cmake --build . --target test
 artifacts:
 - path: INSTALL
   name: neovim-qt
