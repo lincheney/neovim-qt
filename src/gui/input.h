@@ -44,6 +44,7 @@ protected:
 	const Qt::KeyboardModifiers AltModifier   = Qt::AltModifier;
 	const Qt::KeyboardModifiers NoModifier    = Qt::NoModifier;
 	const Qt::Key Key_Alt = Qt::Key_Alt;
+        const Qt::Key Key_Shift = Qt::Key_Shift;
 };
 
 extern InputConv Input;

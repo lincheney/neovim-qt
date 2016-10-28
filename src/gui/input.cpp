@@ -48,7 +48,7 @@ InputConv::InputConv() {
 }
 
 /**
- * Return keyboard modifier prefix 
+ * Return keyboard modifier prefix
  *
  * e.g. C-, A- or C-S-A-
  *
@@ -164,7 +164,7 @@ QString InputConv::convertKey(const QString& text, int k, Qt::KeyboardModifiers 
 		// on macs, text is empty for ctrl+key and cmd+key combos (with or without alt)
 		if (mod & ControlModifier || mod & CmdModifier) {
 			// ignore ctrl, alt and cmd key combos by themselves
-			QList<Qt::Key> keys = { Key_Control, Key_Alt, Key_Cmd };
+			QList<Qt::Key> keys = { Key_Control, Key_Alt, Key_Cmd, Key_Shift };
 			if (keys.contains((Qt::Key)k)) {
 				return QString();
 			} else {
