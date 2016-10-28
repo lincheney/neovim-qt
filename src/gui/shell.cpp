@@ -7,6 +7,7 @@
 #include <QApplication>
 #include <QKeyEvent>
 #include <QMimeData>
+#include <QClipboard>
 #include "msgpackrequest.h"
 #include "input.h"
 #include "konsole_wcwidth.h"
@@ -577,11 +578,18 @@ void Shell::keyPressEvent(QKeyEvent *ev)
 		this->setCursor(Qt::BlankCursor);
 	}
 
-	QString inp = Input.convertKey(ev->text(), ev->key(), ev->modifiers());
-	if (inp.isEmpty()) {
-		QWidget::keyPressEvent(ev);
-		return;
-	}
+        QString inp;
+
+        if ((ev->modifiers() & Qt::ControlModifier) && (ev->modifiers() & Qt::ShiftModifier) && ev->key() == Qt::Key_V) {
+            QClipboard *clipboard = QApplication::clipboard();
+            inp = clipboard->text();
+        } else {
+            inp = Input.convertKey(ev->text(), ev->key(), ev->modifiers());
+            if (inp.isEmpty()) {
+                    QWidget::keyPressEvent(ev);
+                    return;
+            }
+        }
 
 	m_nvim->neovimObject()->vim_input(m_nvim->encode(inp));
 	// FIXME: bytes might not be written, and need to be buffered
