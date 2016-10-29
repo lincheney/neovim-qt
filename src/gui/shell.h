@@ -117,6 +117,8 @@ private:
 	// use the values from above
 	QColor m_hg_foreground, m_hg_background, m_hg_special;
 	QColor m_cursor_color;
+        // pipe cursor in insert mode
+        bool m_tui_cursor_shape;
 
 	/// Cursor position in shell coordinates
 	QPoint m_cursor_pos;

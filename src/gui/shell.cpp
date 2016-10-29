@@ -21,6 +21,7 @@ Shell::Shell(NeovimConnector *nvim, QWidget *parent)
 	m_mouseHide(true),
 	m_hg_foreground(Qt::black), m_hg_background(Qt::white), m_hg_special(QColor()),
 	m_cursor_color(Qt::white), m_cursor_pos(0,0), m_insertMode(false),
+        m_tui_cursor_shape(false),
 	m_resizing(false),
 	m_neovimBusy(false)
 {
@@ -139,6 +140,7 @@ void Shell::setAttached(bool attached)
 		}
 		m_nvim->neovimObject()->vim_command("runtime plugin/nvim_gui_shim.vim");
 		m_nvim->neovimObject()->vim_command("runtime! ginit.vim");
+		m_nvim->neovimObject()->vim_command("call rpcnotify(0, 'Gui', 'CursorShape', $NVIM_TUI_ENABLE_CURSOR_SHAPE)");
 
 		// Noevim was not able to open urls till now. Check if we have any to open.
 		if(!m_deferredOpen.isEmpty()){
@@ -505,7 +507,10 @@ void Shell::handleNeovimNotification(const QByteArray &name, const QVariantList&
 			m_mouseHide = variant_not_zero(args.at(1));
 			int val = m_mouseHide ? 1 : 0;
 			m_nvim->neovimObject()->vim_set_var("GuiMousehide", val);
-		}
+		} else if (guiEvName == "CursorShape" && args.size() == 2) {
+                    auto val = args.at(1).toString();
+                    m_tui_cursor_shape = (val != "");
+                }
 		return;
 	} else if (name != "redraw") {
 		return;
@@ -555,7 +560,7 @@ void Shell::paintEvent(QPaintEvent *ev)
 						m_cursor_pos.x()).doubleWidth;
 		QRect cursorRect(neovimCursorTopLeft(), cellSize());
 
-		if (m_insertMode) {
+		if (m_tui_cursor_shape && m_insertMode) {
 			cursorRect.setWidth(2);
 		} else if (wide) {
 			cursorRect.setWidth(cursorRect.width()*2);
