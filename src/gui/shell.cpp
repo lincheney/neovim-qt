@@ -20,8 +20,7 @@ Shell::Shell(NeovimConnector *nvim, QWidget *parent)
 	m_font_bold(false), m_font_italic(false), m_font_underline(false), m_font_undercurl(false),
 	m_mouseHide(true),
 	m_hg_foreground(Qt::black), m_hg_background(Qt::white), m_hg_special(QColor()),
-	m_cursor_color(Qt::white), m_cursor_pos(0,0), m_insertMode(false),
-        m_tui_cursor_shape(false),
+	m_cursor_color(Qt::white), m_tui_cursor_shape(false), m_cursor_pos(0,0), m_insertMode(false),
 	m_resizing(false),
 	m_neovimBusy(false)
 {
